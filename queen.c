@@ -45,31 +45,29 @@ int solve(int* current,int* queenPos,int queenNum, int* queenSaved,
   }
   return 1;
 }
-void draw(int* queenPos,int size){
+void draw(int* queenPos,int board_size,int queen_size){
 
-  for(int i = 0; i < 2*size+1;i++){
+  for(int i = 0; i < 2*board_size+1;i++){
     printf("-");
   }
   printf("\n");
-  for(int j = 0; j < size; j++){
+  for(int j = 0; j < board_size; j++){
     printf("|");
-    int rowMatch = 0;
-    for(int k = 0; k < size; k++){
-      if(queenPos[2*k] == j){
-        rowMatch = j;
-      }
-    }
-    for(int l = 0;l < size; l++){
-        if(l==queenPos[2*rowMatch+1]){
-          printf("Q|");
-
+    for(int l = 0;l < board_size; l++){
+        int isQueen = 0;
+        for(int k = 0; k < queen_size ; k++){
+          if(queenPos[k*2] == j && queenPos[k*2+1] == l){
+            printf("Q|");
+            isQueen = 1;
+          }
         }
-        else{
-            printf("_|");
+
+        if (!isQueen){
+          printf("_|");
         }
+
       }
 
-    rowMatch = 0;
 
     printf("\n");
   }
@@ -111,16 +109,25 @@ int main(){
       }
       else if(displayFlag == 1 && countFlag == 0){
         queenPos[0] = 0;
-        queenPos[1] = 0;
+        queenPos[1] = 3;
         queenPos[2] = 1;
-        queenPos[3] = 2;
-        queenPos[4] = 3;
-        queenPos[5] = 3;
-        queenPos[6] = 4;
-        queenPos[7] = 4;
-        draw(queenPos,size);
-        // int checkTest = checkLegalMove(size,queenPos,4);
-        // printf("The move is: %d",checkTest);
+        queenPos[3] = 6;
+        queenPos[4] = 2;
+        queenPos[5] = 2;
+        queenPos[6] = 3;
+        queenPos[7] = 7;
+        queenPos[8]  = 4;
+        queenPos[9]  = 1;
+        queenPos[10]  = 5;
+        queenPos[11]  = 4;
+        queenPos[12]  = 6;
+        queenPos[13]  = 0;
+        queenPos[14]  = 6;
+        queenPos[15]  = 5;
+        printf("size: %d",size);
+        draw(queenPos,size,8);
+        int checkTest = checkLegalMove(size,queenPos,4);
+        printf("The move is: %d",checkTest);
       }
       else{
         printf("Total number of solutions: %d\n", count);
