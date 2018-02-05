@@ -1,50 +1,82 @@
 #include <stdio.h>
 #include <stdlib.h>
-int checkLegalMove(int size, int* queenPos, int queenNum){
+int checkLegalMove(int size, int currentR,int currentC,int* queenPos,
+  int queenNum){
   for(int i = 0; i < queenNum; i++){
-    int row = queenPos[(queenNum-1)*2];
-    int column = queenPos[(queenNum-1)*2+1];
-    for(int t = 0; t < i; t++){
-      if(queenPos[t*2] == row){
-        return -1;
+    // int row = queenPos[i*2];
+    // int column = queenPos[i*2+1];
+    int row = currentR;
+    int column = currentC;
+    for(int t = 0; t < queenNum; t++){
+      if(queenPos[t*2] == row && t != i){
+        return 0;
       }
     }
-    for(int o = 0; o < i; o++){
-      if(queenPos[o*2+1] == column){
-        return -1;
+    for(int o = 0; o < queenNum; o++){
+      if(queenPos[o*2+1] == column && o != i){
+        return 0;
       }
     }
-    int r = row;
-    int c = column;
-    for(int j = 0; j < i; j++){
-      if((row-queenPos[j*2]) == (column - queenPos[j*2+1])){
-        return -1;
+
+    for(int j = 0; j < queenNum; j++){
+
+      if((row-queenPos[j*2]) == (column - queenPos[j*2+1]) && j != i){
+
+        return 0;
       }
     }
-    for(int h = 0; h < i; h++){
-      if((queenPos[h*2] - row) == (column - queenPos[h*2+1])){
-        return -1;
+    for(int h = 0; h < queenNum; h++){
+      if((queenPos[h*2] - row) == (column - queenPos[h*2+1]) && h != i){
+        return 0;
       }
     }
-  }
-  return 0;
-
-}
-int solve(int* current,int* queenPos,int queenNum, int* queenSaved,
-  int* count, int size){
-
-  if (solve(current,queenPos,queenNum,queenSaved,count,size) == -1){
-    int* next = (int*) malloc((sizeof(int))*2);
-    next = current;
-    next[1] = current[1] + 1;
-
-    solve(next,queenPos,queenNum,queenSaved,count,size);
-  }
-  else if (checkLegalMove(size,queenPos,queenNum)){
-
   }
   return 1;
+
 }
+int solve(int currentR, int currentC,int* queenPos,int queenNum, int* queenSaved,
+  int* count, int size,int displayFlag){
+
+  // printf("currentR: %d  currentC: %d \n",currentR,currentC);
+  // printf("queenPos: %d",queenPos[1]);
+  // printf("queenNum: %d\n", queenNum);
+  // printf("count: %d\n",*count);
+  if (solve(currentR, currentC, queenPos, queenNum,queenSaved, count,
+    size,displayFlag) == -1){
+    printf("made it here");
+    return -1;
+  }
+  // else{
+    // printf("made it into the else");
+    // if(checkLegalMove(size,currentR,currentC,queenPos,queenNum) == 1){
+    //
+    //   if(currentC == size - 1){
+    //     if(*count == 0){
+    //       queenSaved = queenPos;
+    //     }
+    //     *count = *count + 1;
+    //     return 1;
+    //   }
+    //   queenPos[(queenNum-1)*2] = currentR;
+    //   queenPos[(queenNum-1)*2+1] = currentC;
+    // }
+    // else if (currentR == size - 1){
+    //   return -1;
+    // }
+  // }
+  // while(currentR <= size-1 && (displayFlag == 1 && *count == 0)){
+  //   printf("made it into the while loop");
+  //   solve(currentR+1,currentC,queenPos,queenNum,queenSaved,count,size,displayFlag);
+  // }
+  // printf("made it out of the while loop");
+  // solve(currentR,currentC+1,queenPos,queenNum+1,queenSaved,count, size,displayFlag);
+
+
+
+
+
+    return -1;
+  }
 void draw(int* queenPos,int board_size,int queen_size){
 
   for(int i = 0; i < 2*board_size+1;i++){
@@ -108,26 +140,28 @@ int main(){
         printf("No solutions exist!\n");
       }
       else if(displayFlag == 1 && countFlag == 0){
-        queenPos[0] = 0;
-        queenPos[1] = 3;
-        queenPos[2] = 1;
-        queenPos[3] = 6;
-        queenPos[4] = 2;
-        queenPos[5] = 2;
-        queenPos[6] = 3;
-        queenPos[7] = 7;
-        queenPos[8]  = 4;
-        queenPos[9]  = 1;
-        queenPos[10]  = 5;
-        queenPos[11]  = 4;
-        queenPos[12]  = 6;
-        queenPos[13]  = 0;
-        queenPos[14]  = 6;
-        queenPos[15]  = 5;
+        // queenPos[0] = 0;
+        // queenPos[1] = 3;
+        // queenPos[2] = 1;
+        // queenPos[3] = 6;
+        // queenPos[4] = 2;
+        // queenPos[5] = 2;
+        // queenPos[6] = 3;
+        // queenPos[7] = 7;
+        // queenPos[8]  = 4;
+        // queenPos[9]  = 1;
+        // queenPos[10]  = 5;
+        // queenPos[11]  = 4;
+        // queenPos[12]  = 6;
+        // queenPos[13]  = 0;
+        // queenPos[14]  = 6;
+        // queenPos[15]  = 5;
         printf("size: %d",size);
-        draw(queenPos,size,8);
-        int checkTest = checkLegalMove(size,queenPos,4);
-        printf("The move is: %d",checkTest);
+
+        int result = solve(0,0,queenPos,0,queenSaved,&count,size,displayFlag);
+        printf("result is : %d ", result);
+        //draw(queenSaved,size,size);
+
       }
       else{
         printf("Total number of solutions: %d\n", count);
